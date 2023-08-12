@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 def cadastrar_cliente(clientes):
 
@@ -17,7 +18,7 @@ def cadastrar_cliente(clientes):
 
             #O cliente já está cadastrado?
             if cpf in clientes:
-                print('O CPF informado já consta na base de dados. Faça uma consulta dos clientes já cadastrado.')
+                print('\nErro! O CPF informado já consta na base de dados.\nFaça uma consulta dos clientes já cadastrados.\n')
                 return 0
             
             else:
@@ -37,8 +38,37 @@ def cadastrar_cliente(clientes):
         'endereco': endereco_completo
     }
 
-    print('\nCliente cadastrado com sucesso!')
+    print('\nCliente cadastrado com sucesso!\n')
     return 1
+
+
+def listar_clientes(clientes):
+
+    if len(clientes) == 0:
+        print('\nAinda não há clientes cadastrados.\n')
+    else:
+        print('\nLista de clientes cadastrados:')
+
+        # clientes.items() gera tuplas onde o primeiro item é a chave do dicionário (o CPF do cliente), 
+        #     e o segundo item o conteúdo do dicionário interno (os dados do cliente).
+        for cpf, dados in clientes.items():
+            print(f'\nCPF: {cpf}')
+            print(f'Nome: {dados["nome"]}')
+            print(f'Data de Nascimento: {dados["data_nascimento"]}')
+            print(f'Idade: {calcular_idade(dados["data_nascimento"])} anos')
+            print(f'Endereço: {dados["endereco"]}\n')
+
+
+def calcular_idade(data_nascimento):
+    hoje = datetime.now()
+
+    #Converter a data de nascimento para um objeto da classe datetime, de acordo com o formato de data especificado
+    data_nascimento = datetime.strptime(data_nascimento, '%d/%m/%Y')
+    
+    #Calcula a data de nascimento subtraindo os anos, e depois verificando se a pessoa já fez aniversário no ano atual (subtrai 1 se ainda não)
+    idade = hoje.year - data_nascimento.year - ((hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day))
+    return idade
+
 
 def confirmacao (operacao, valor):
 
@@ -81,6 +111,7 @@ menu = '''
       [3] Extrato
       [4] Cadastrar Conta
       [5] Cadastrar Cliente
+      [6] Listar Clientes
       [0] Sair
         
   =========================      
@@ -200,13 +231,12 @@ while True:
     elif opcao == '5':
 
         print('Opção selecionada: CADASTRAR CLIENTE \n')
+        cadastrar_cliente(clientes)
 
-        if cadastrar_cliente(clientes) == 1:
-            print('Cliente cadastrado com sucesso!')
-        
-        input('Pressione qualquer tecla para continuar...')
+    elif opcao == '6':
 
-        print(clientes)
+        print('Opção selecionada: LISTAR CLIENTES \n')
+        listar_clientes(clientes)
 
     elif opcao == '0':
         print('\nAgradecemos por utilizar os nossos serviços! Tenha um bom dia! \n')
@@ -216,6 +246,8 @@ while True:
     else:
         print('Opção inválida!')
         input('Pressione qualquer tecla para continuar.')
+
+    input('Pressione qualquer tecla para continuar...')
 
     print('\nDeseja realizar outra operação?\n')
 
