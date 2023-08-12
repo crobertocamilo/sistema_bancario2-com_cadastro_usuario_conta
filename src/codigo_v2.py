@@ -45,9 +45,9 @@ def cadastrar_cliente(clientes):
 def listar_clientes(clientes):
 
     if len(clientes) == 0:
-        print('\nAinda não há clientes cadastrados.\n')
+        print('Ainda não há clientes cadastrados.\n')
     else:
-        print('\nLista de clientes cadastrados:')
+        print('Lista de clientes cadastrados:')
 
         # clientes.items() gera tuplas onde o primeiro item é a chave do dicionário (o CPF do cliente), 
         #     e o segundo item o conteúdo do dicionário interno (os dados do cliente).
@@ -59,13 +59,92 @@ def listar_clientes(clientes):
             print(f'Endereço: {dados["endereco"]}\n')
 
 
+def cadastrar_conta(contas,clientes):
+
+    if (len(clientes) < 1):
+        print('Não é possível criar uma conta. Não há nenhum cliente cadastrado!')
+        print('Cadastre um cliente primeiro para depois criar sua conta.\n')
+        return 0
+    
+    #Gera o número da nova conta somando 1 ao número da última conta cadastrada ou inicia em 1 se não houver nenhuma conta.
+    nro_conta = (max(contas.keys()) + 1) if (len(contas) > 0) else 1
+    agencia = '0001'
+
+    print(f'Agência: {agencia}')
+    print(f'Conta Corrente: {nro_conta}')
+
+    while True:
+        cpf = input('CPF do titular (somente números, 11 dígitos): ')
+
+        #O CPF informado é válido?
+        if cpf.isdigit() == False or len(cpf) != 11:
+            print('Número de CPF inválido! \n')
+            continue
+        
+        else:
+
+            #O cliente já está cadastrado?
+            if cpf not in clientes:
+                print('\nErro! O CPF informado não consta entre os cliente cadastrados!\nPrimeiro cadastre o cliente para depois criar sua conta.\n')
+                return 0
+            
+            else:                
+                break
+
+    print(f'Nome do Cliente: {clientes[cpf]["nome"]}')
+    
+    conta = {
+        'agencia': agencia,
+        'cpf_titular': cpf,
+        'saldo': 0.0,
+        'limite_diario_saques': 3,
+        'limite_valor_por_saque': 500,
+        'qtd_saques_dia': 0,
+        'valor_sacado_dia': 0.0
+    }
+
+    contas[nro_conta] = conta
+
+    os.system('clear')
+    print('Conta corrente criada com sucesso!\n')
+    print('Detalhes da Conta corrente:\n')
+    imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+
+    
+def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
+    print(f'Agência: {conta_corrente["agencia"]}')
+    print(f'Conta Corrente: {nro_conta}')
+    cpf = conta_corrente["cpf_titular"]
+    print(f'CPF do Titular: {cpf}')
+    print(f'Nome do Titular: {clientes[cpf]["nome"]}')
+    print(f'Saldo: R$ {conta_corrente["saldo"]:0.2f}')
+    print(f'Limite Diário de Saques: {conta_corrente["limite_diario_saques"]}')
+    print(f'Limite de Valor por Saque: {conta_corrente["limite_valor_por_saque"]}')
+    print(f'Número de Saques Efetuados Hoje: {conta_corrente["qtd_saques_dia"]}')
+    print(f'Valor Sacado Hoje: R$ {conta_corrente["valor_sacado_dia"]:0.2f}\n')
+
+
+# Recebe os dados do cliente a partir de seu login no sistema
+CLIENTE = {
+    'nome': 'Arthur',
+    'agencia': 1234,
+    'conta': '0001-1',
+    'saldo': 400,
+    'limite_diario_saques': 3,
+    'limite_valor_por_saque': 500,
+    'qtd_saques_dia': 0,
+    'valor_sacado_dia': 0
+}
+
+
 def calcular_idade(data_nascimento):
     hoje = datetime.now()
 
-    #Converter a data de nascimento para um objeto da classe datetime, de acordo com o formato de data especificado
+    #Converter a data de nascimento para um objeto da classe datetime, de acordo com o formato de data especificado.
     data_nascimento = datetime.strptime(data_nascimento, '%d/%m/%Y')
     
-    #Calcula a data de nascimento subtraindo os anos, e depois verificando se a pessoa já fez aniversário no ano atual (subtrai 1 se ainda não)
+    #Calcula a data de nascimento subtraindo os anos, e depois verificando se a pessoa já fez aniversário no ano atual (subtrai 1 se ainda não).
+    #    Numa expressão numérica, True = 1 e False = 0.
     idade = hoje.year - data_nascimento.year - ((hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day))
     return idade
 
@@ -91,17 +170,7 @@ def confirmacao (operacao, valor):
             continue
 
 
-# Recebe os dados do cliente a partir de seu login no sistema
-CLIENTE = {
-    'nome': 'Arthur',
-    'agencia': 1234,
-    'conta': '0001-1',
-    'saldo': 400,
-    'limite_diario_saques': 3,
-    'limite_valor_por_saque': 500,
-    'qtd_saques_dia': 0,
-    'valor_sacado_dia': 0
-}
+
 
 menu = '''
   === Menu de Operações ===
@@ -110,14 +179,16 @@ menu = '''
       [2] Saque
       [3] Extrato
       [4] Cadastrar Conta
-      [5] Cadastrar Cliente
-      [6] Listar Clientes
+      [5] Listar Contas
+      [6] Cadastrar Cliente
+      [7] Listar Clientes
       [0] Sair
         
   =========================      
     '''
     
 clientes = {}
+contas = {}
 extrato = [f'Saldo anterior: R$ {CLIENTE["saldo"]:0.2f}']
 
 #Limpa a tela do terminal
@@ -204,7 +275,6 @@ while True:
                         else:
                             print('\nNão é possível efetuar o saque: Saldo insuficiente!')
                             print(f'Saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
-                            input('Pressione qualquer tecla para continuar.')
                     
                     else:
                         print('\nOpção selecionada: NÃO \n')
@@ -226,14 +296,25 @@ while True:
                 print(extrato[item])
             print(f'Saldo atual:    R$ {CLIENTE["saldo"]:0.2f}\n')
         print('===========================\n\n')
-        input('Pressione qualquer tecla para continuar.')
+
+    elif opcao == '4':
+
+        print('Opção selecionada: CADASTRAR CONTA \n')
+        cadastrar_conta(contas,clientes)
 
     elif opcao == '5':
+
+        print('Opção selecionada: LISTAR CONTAS CORRENTE CADASTRADAS \n')
+        
+        for nro_conta in contas:
+            imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+
+    elif opcao == '6':
 
         print('Opção selecionada: CADASTRAR CLIENTE \n')
         cadastrar_cliente(clientes)
 
-    elif opcao == '6':
+    elif opcao == '7':
 
         print('Opção selecionada: LISTAR CLIENTES \n')
         listar_clientes(clientes)
