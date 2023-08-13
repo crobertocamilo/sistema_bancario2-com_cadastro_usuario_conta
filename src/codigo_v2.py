@@ -140,7 +140,7 @@ def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
     print(f'Nome do Titular: {clientes[cpf]["nome"]}')
     print(f'Saldo: R$ {conta_corrente["saldo"]:0.2f}')
     print(f'Limite Diário de Saques: {conta_corrente["limite_diario_saques"]}')
-    print(f'Limite de Valor por Saque: {conta_corrente["limite_valor_por_saque"]}')
+    print(f'Limite de Valor por Saque: R$ {conta_corrente["limite_valor_por_saque"]:0.2f}')
     print(f'Número de Saques Efetuados Hoje: {conta_corrente["qtd_saques_dia"]}')
     print(f'Valor Sacado Hoje: R$ {conta_corrente["valor_sacado_dia"]:0.2f}\n')
 
@@ -169,7 +169,7 @@ def login_conta(clientes, contas):
         print('\nNúmero de conta inválido!\nCadastre-a ou consulte a lista de contas já cadastradas.\n')
     
 
-def depositar(CLIENTE, clientes, contas, extrato):
+def depositar(nro_conta, contas, extrato):
         while True:
             try:
                 valor = float(input('Informe o valor a ser depositado: '))
@@ -184,20 +184,20 @@ def depositar(CLIENTE, clientes, contas, extrato):
 
             print(f'\nConfirma o depósito de R$ {valor:.2f}?')            
             if (confirmar_operacao() == True):
-                CLIENTE['saldo'] += valor
+                contas[nro_conta]["saldo"] += valor
                 print(f'\nDepósito confirmado! \n')
-                print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
+                print(f'Novo saldo da conta: R$ {contas[nro_conta]["saldo"]:.2f} \n')
                 extrato.append(f'Depósito........R$  {valor:0.2f}') 
                 return True
             else:
                 return False
                                    
 
-def sacar(CLIENTE, clientes, contas, extrato):
+def sacar(nro_conta, contas, extrato):
         
         #Cliente já excedeu o limite de saques no dia?
-        if (CLIENTE['qtd_saques_dia'] >= CLIENTE['limite_diario_saques']):
-            print(f'Limite de saque diário ({CLIENTE["qtd_saques_dia"]}) excedido!')
+        if (contas[nro_conta]["qtd_saques_dia"] >= contas[nro_conta]["limite_diario_saques"]):
+            print(f'Limite de saque diário ({contas[nro_conta]["qtd_saques_dia"]}) excedido!')
             print('Não é possível fazer a operação! Por favor, tente novamente amanhã.\n')
             return False
 
@@ -213,31 +213,32 @@ def sacar(CLIENTE, clientes, contas, extrato):
             
             if valor <= 0:
                 print('Valor de saque inválido! \n')
-            elif valor > CLIENTE['limite_valor_por_saque']:
-                print(f'Valor inválido! O limite de saque por operação é de R$ {CLIENTE["limite_valor_por_saque"]:0.2f} \n')           
+            elif valor > contas[nro_conta]["limite_valor_por_saque"]:
+                print(f'Valor inválido! O limite de saque por operação é de R$ {contas[nro_conta]["limite_valor_por_saque"]:0.2f} \n')           
             else:
 
                 print(f'\nConfirma o saque de R$ {valor:.2f}?')
                 if (confirmar_operacao() == True):
                     
                     #O cliente tem saldo suficiente para o saque?
-                    if (CLIENTE['saldo'] - valor) >= 0:
-                        CLIENTE['saldo'] -= valor
-                        CLIENTE['qtd_saques_dia'] += 1
+                    if (contas[nro_conta]['saldo'] - valor) >= 0:
+                        contas[nro_conta]['saldo'] -= valor
+                        contas[nro_conta]['qtd_saques_dia'] += 1
+                        contas[nro_conta]['valor_sacado_dia'] += valor
                         print(f'\nSaque efetuado! \n')
-                        print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
+                        print(f'Novo saldo da conta: R$ {contas[nro_conta]["saldo"]:.2f} \n')
                         extrato.append(f'Saque...........R$  {valor:0.2f}')
                         return True
 
                     else:
                         print('\nNão é possível efetuar o saque: Saldo insuficiente!')
-                        print(f'Saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
+                        print(f'Saldo da conta: R$ {contas[nro_conta]["saldo"]:.2f} \n')
                         return False
                 else:
                     return False
                 
 
-def imprimir_extrato(extrato):
+def imprimir_extrato(nro_conta, contas, extrato):
         print('==== Extrato da Sessão ====\n')
 
         #Houve alguma movientação durante a seção?
@@ -248,21 +249,21 @@ def imprimir_extrato(extrato):
         else:
             for item in range(len(extrato)):
                 print(extrato[item])
-            print(f'Saldo atual:    R$ {CLIENTE["saldo"]:0.2f}\n')
+            print(f'Saldo atual:    R$ {contas[nro_conta]["saldo"]:0.2f}\n')
         print('===========================\n\n')
 
 
 # Recebe os dados do cliente a partir de seu login no sistema
-CLIENTE = {
-    'nome': 'Arthur',
-    'agencia': 1234,
-    'conta': '0001-1',
-    'saldo': 400,
-    'limite_diario_saques': 3,
-    'limite_valor_por_saque': 500,
-    'qtd_saques_dia': 0,
-    'valor_sacado_dia': 0
-}
+# CLIENTE = {
+#     'nome': 'Arthur',
+#     'agencia': 1234,
+#     'conta': '0001-1',
+#     'saldo': 400,
+#     'limite_diario_saques': 3,
+#     'limite_valor_por_saque': 500,
+#     'qtd_saques_dia': 0,
+#     'valor_sacado_dia': 0
+# }
 
 
 def validar_data_nascimento():
@@ -338,7 +339,7 @@ menu = '''
 clientes = {}
 contas = {}
 nro_conta = 0
-extrato = [f'Saldo anterior: R$ {CLIENTE["saldo"]:0.2f}']
+#extrato = [f'Saldo anterior: R$ {CLIENTE["saldo"]:0.2f}']
 
 
 #Limpa a tela do terminal
@@ -363,9 +364,9 @@ while True:
 
         if nova_conta is not None:
             nro_conta = int(nova_conta)
+            
             #Os registros em extrato são resetados ao trocar de conta - troca de sessão.
-            #extrato = [f'Saldo anterior: R$ {contas[nro_conta]["saldo"]:0.2f}']
-            print(f'Entrou {nro_conta}')
+            extrato = [f'Saldo anterior: R$ {contas[nro_conta]["saldo"]:0.2f}']
        
     elif opcao == '2':
 
@@ -375,7 +376,7 @@ while True:
                 print('Opção selecionada: DEPÓSITO \n')
 
                 #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o depósito (return False)
-                if depositar(CLIENTE, clientes, contas, extrato) is not None:
+                if depositar(nro_conta, contas, extrato) is not None:
                     break
         else:
             print('\nErro: É necessário selecionar uma conta corrente antes de efetuar um depósito!\n')
@@ -388,7 +389,7 @@ while True:
                 print('Opção selecionada: SAQUE \n')
 
                 #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o saque (return False)
-                if sacar(CLIENTE, clientes, contas, extrato) is not None:
+                if sacar(nro_conta, contas, extrato) is not None:
                     break
         else:
             print('\nErro: É necessário selecionar uma conta corrente antes de efetuar um saque!\n')
@@ -399,7 +400,7 @@ while True:
 
             print(cabecalho)
             print('Opção selecionada: EXTRATO \n')
-            imprimir_extrato(extrato)
+            imprimir_extrato(nro_conta, contas, extrato)
         else:
             print('\nErro: É necessário selecionar uma conta corrente antes de visualizar um extrato!\n')
 
