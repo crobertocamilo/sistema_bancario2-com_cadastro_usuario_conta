@@ -136,6 +136,89 @@ def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
     print(f'Valor Sacado Hoje: R$ {conta_corrente["valor_sacado_dia"]:0.2f}\n')
 
 
+def depositar(CLIENTE, clientes, contas, extrato):
+        while True:
+            try:
+                valor = float(input('Informe o valor a ser depositado: '))
+                break
+            except:
+                print('Valor de depósito inválido! \n')
+                continue
+
+        if valor <= 0:
+            print('Valor de depósito inválido! \n')
+        else:
+
+            print(f'\nConfirma o depósito de R$ {valor:.2f}?')            
+            if (confirmar_operacao() == True):
+                CLIENTE['saldo'] += valor
+                print(f'\nDepósito confirmado! \n')
+                print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
+                extrato.append(f'Depósito........R$  {valor:0.2f}') 
+                return True
+            else:
+                return False
+                                   
+
+def sacar(CLIENTE, clientes, contas, extrato):
+        
+        #Cliente já excedeu o limite de saques no dia?
+        if (CLIENTE['qtd_saques_dia'] >= CLIENTE['limite_diario_saques']):
+            print(f'Limite de saque diário ({CLIENTE["qtd_saques_dia"]}) excedido!')
+            print('Não é possível fazer a operação! Por favor, tente novamente amanhã.\n')
+            return False
+
+        else:
+
+            while True:
+                try:
+                    valor = float(input('Informe o valor a ser sacado: '))
+                    break
+                except:
+                    print('Valor de saque inválido! \n')
+                    continue
+            
+            if valor <= 0:
+                print('Valor de saque inválido! \n')
+            elif valor > CLIENTE['limite_valor_por_saque']:
+                print(f'Valor inválido! O limite de saque por operação é de R$ {CLIENTE["limite_valor_por_saque"]:0.2f} \n')           
+            else:
+
+                print(f'\nConfirma o saque de R$ {valor:.2f}?')
+                if (confirmar_operacao() == True):
+                    
+                    #O cliente tem saldo suficiente para o saque?
+                    if (CLIENTE['saldo'] - valor) >= 0:
+                        CLIENTE['saldo'] -= valor
+                        CLIENTE['qtd_saques_dia'] += 1
+                        print(f'\nSaque efetuado! \n')
+                        print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
+                        extrato.append(f'Saque...........R$  {valor:0.2f}')
+                        return True
+
+                    else:
+                        print('\nNão é possível efetuar o saque: Saldo insuficiente!')
+                        print(f'Saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
+                        return False
+                else:
+                    return False
+                
+
+def imprimir_extrato(extrato):
+        print('==== Extrato da Sessão ====\n')
+
+        #Houve alguma movientação durante a seção?
+        if len(extrato) == 1:
+            print(extrato[0])
+            print('Não foram realizadas movimentações.')
+        
+        else:
+            for item in range(len(extrato)):
+                print(extrato[item])
+            print(f'Saldo atual:    R$ {CLIENTE["saldo"]:0.2f}\n')
+        print('===========================\n\n')
+
+
 # Recebe os dados do cliente a partir de seu login no sistema
 CLIENTE = {
     'nome': 'Arthur',
@@ -181,11 +264,9 @@ def calcular_idade(data_nascimento):
     return idade
 
 
-def confirmar_operacao(operacao, valor):
+def confirmar_operacao():
 
     print(f'''
-  Confirma o {operacao} de R$ {valor:.2f}?
-
      [1] Sim
      [0] Não
 
@@ -240,91 +321,23 @@ while True:
         while True:
             print('Opção selecionada: DEPÓSITO \n')
 
-            while True:
-                try:
-                    valor = float(input('Informe o valor a ser depositado: '))
-                    break
-                except:
-                    print('Valor de depósito inválido! \n')
-                    continue
-
-            if valor <= 0:
-                print('Valor de depósito inválido! \n')
-                continue
-            else:
-                
-                if (confirmar_operacao('depósito',valor) == True):
-                    CLIENTE['saldo'] += valor
-                    print(f'\nDepósito confirmado! \n')
-                    print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
-                    extrato.append(f'Depósito........R$  {valor:0.2f}') 
-                           
+            #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o depósito (return False)
+            if depositar(CLIENTE, clientes, contas, extrato) is not None:
                 break
 
     elif opcao == '2':
-        
-        #Cliente já excedeu o limite de saques no dia?
-        if (CLIENTE['qtd_saques_dia'] >= CLIENTE['limite_diario_saques']):
-            print(f'Limite de saque diário ({CLIENTE["qtd_saques_dia"]}) excedido!')
-            print('Não é possível fazer a operação! Por favor, tente novamente amanhã.')
 
-        else:
-            while True:
-                print('Opção selecionada: SAQUE \n')
+        while True:
+            print('Opção selecionada: SAQUE \n')
 
-                while True:
-                    try:
-                        valor = float(input('Informe o valor a ser sacado: '))
-                        break
-                    except:
-                        print('Valor de saque inválido! \n')
-                        continue
+            #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o saque (return False)
+            if sacar(CLIENTE, clientes, contas, extrato) is not None:
+                break
                 
-                if valor <= 0:
-                    print('Valor de saque inválido! \n')
-                    continue
-                elif valor > CLIENTE['limite_valor_por_saque']:
-                    print('Valor inválido! O limite de saque por operação é de R$ 500 \n')
-                    continue            
-                else:
-
-                    if (confirmar_operacao('saque',valor) == True):
-                        
-                        #O cliente tem saldo suficiente para o saque?
-                        if (CLIENTE['saldo'] - valor) >= 0:
-                            CLIENTE['saldo'] -= valor
-                            CLIENTE['qtd_saques_dia'] += 1
-                            # os.system('clear')
-                            # print('Opção selecionada: SIM \n')
-                            print(f'\nSaque efetuado! \n')
-                            print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
-                            input('Pressione qualquer tecla para continuar.')
-                            extrato.append(f'Saque...........R$  {valor:0.2f}')
-
-                        else:
-                            print('\nNão é possível efetuar o saque: Saldo insuficiente!')
-                            print(f'Saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
-                    
-                    # else:
-                    #     print('\nOpção selecionada: NÃO \n')
-                
-                    break
-            
-
     elif opcao == '3':
-        print('Opção selecionada: EXTRATO \n')
-        print('==== Extrato da Sessão ====\n')
 
-        #Houve alguma movientação durante a seção?
-        if len(extrato) == 1:
-            print(extrato[0])
-            print('Não foram realizadas movimentações.')
-        
-        else:
-            for item in range(len(extrato)):
-                print(extrato[item])
-            print(f'Saldo atual:    R$ {CLIENTE["saldo"]:0.2f}\n')
-        print('===========================\n\n')
+        print('Opção selecionada: EXTRATO \n')
+        imprimir_extrato(extrato)
 
     elif opcao == '4':
 
@@ -353,7 +366,6 @@ while True:
 
     else:
         print('Opção inválida!')
-        input('Pressione qualquer tecla para continuar.')
 
     input('Pressione qualquer tecla para continuar...')
 
