@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import re
 
 def cadastrar_cliente(clientes):
 
@@ -24,7 +25,8 @@ def cadastrar_cliente(clientes):
             else:
                 break
     
-    data_nascimento = input('Data de Nascimento (dd/mm/aaaa): ')
+
+    data_nascimento = validar_data_nascimento()
     endereco = input('Endereço (logradouro, número, complemento): \n')
     bairro = input('Bairro: ')
     municipio = input('Cidade: ')
@@ -110,7 +112,17 @@ def cadastrar_conta(contas,clientes):
     print('Detalhes da Conta corrente:\n')
     imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
 
-    
+
+def listar_contas(contas,clientes):
+
+    if len(contas) == 0:
+        print('Ainda não há conta corrente cadastrada.\n')
+    else:
+        print('Lista de contas corrente cadastradas:\n')
+        for nro_conta in contas:
+            imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+
+
 def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
     print(f'Agência: {conta_corrente["agencia"]}')
     print(f'Conta Corrente: {nro_conta}')
@@ -137,6 +149,26 @@ CLIENTE = {
 }
 
 
+def validar_data_nascimento():
+
+    #Regex para a data. O "r" informa ao python que é uma string bruta, evitando que ele trate "\d" ou "\n" como marcadores especiais.
+    padrao = r'^\d{2}/\d{2}/\d{4}$'    
+    while True:
+        data_nascimento = input('Data de Nascimento (dd/mm/aaaa): ')
+
+        #re.math(padrao, string) só retorna algum valor caso haja alguma correspondência do padrão na string.
+        if re.match(padrao, data_nascimento) is not None:
+
+            #A função map() desempacota os três valores da lista gerada pelo split('/'), antes aplicando a função int() a cada valor.
+            dia,mes,ano = map(int, data_nascimento.split('/'))
+            if (1 <= dia <= 31) and (1 <= mes <= 12) and (1900 <= ano <= datetime.now().year):
+                return data_nascimento
+            else:
+                print('\nValor de data inválido!')
+        else:
+            print('\nValor inválido! Utilize o formato de data especificado.')
+
+
 def calcular_idade(data_nascimento):
     hoje = datetime.now()
 
@@ -149,7 +181,7 @@ def calcular_idade(data_nascimento):
     return idade
 
 
-def confirmacao (operacao, valor):
+def confirmar_operacao(operacao, valor):
 
     print(f'''
   Confirma o {operacao} de R$ {valor:.2f}?
@@ -160,15 +192,17 @@ def confirmacao (operacao, valor):
   ''')
     
     while True:
-
         resposta = input('Confirmação: ')
 
-        if resposta in ['0','1']:
-            return resposta
+        if resposta == '1':
+            print('Opção selecionada: SIM \n')
+            return True
+        elif resposta == '0':
+            print('Opção selecionada: NÃO \n')
+            return False
         else:
             print('Opção inválida! \n')
             continue
-
 
 
 
@@ -219,16 +253,11 @@ while True:
                 continue
             else:
                 
-                if (confirmacao('depósito',valor) == '1'):
+                if (confirmar_operacao('depósito',valor) == True):
                     CLIENTE['saldo'] += valor
-                    os.system('clear')
-                    print('Opção selecionada: SIM \n')
-                    print(f'Depósito confirmado! \n')
+                    print(f'\nDepósito confirmado! \n')
                     print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
                     extrato.append(f'Depósito........R$  {valor:0.2f}') 
-
-                else:
-                    print('\nOpção selecionada: NÃO \n')
                            
                 break
 
@@ -259,15 +288,15 @@ while True:
                     continue            
                 else:
 
-                    if (confirmacao('saque',valor) == '1'):
+                    if (confirmar_operacao('saque',valor) == True):
                         
                         #O cliente tem saldo suficiente para o saque?
                         if (CLIENTE['saldo'] - valor) >= 0:
                             CLIENTE['saldo'] -= valor
                             CLIENTE['qtd_saques_dia'] += 1
-                            os.system('clear')
-                            print('Opção selecionada: SIM \n')
-                            print(f'Saque efetuado! \n')
+                            # os.system('clear')
+                            # print('Opção selecionada: SIM \n')
+                            print(f'\nSaque efetuado! \n')
                             print(f'Novo saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
                             input('Pressione qualquer tecla para continuar.')
                             extrato.append(f'Saque...........R$  {valor:0.2f}')
@@ -276,8 +305,8 @@ while True:
                             print('\nNão é possível efetuar o saque: Saldo insuficiente!')
                             print(f'Saldo da conta: R$ {CLIENTE["saldo"]:.2f} \n')
                     
-                    else:
-                        print('\nOpção selecionada: NÃO \n')
+                    # else:
+                    #     print('\nOpção selecionada: NÃO \n')
                 
                     break
             
@@ -305,9 +334,7 @@ while True:
     elif opcao == '5':
 
         print('Opção selecionada: LISTAR CONTAS CORRENTE CADASTRADAS \n')
-        
-        for nro_conta in contas:
-            imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+        listar_contas(contas,clientes)
 
     elif opcao == '6':
 
