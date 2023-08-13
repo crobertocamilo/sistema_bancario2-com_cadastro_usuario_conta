@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 import re
 
+
 def cadastrar_cliente(clientes):
 
     print('Informe os dados do cliente: \n')
@@ -34,14 +35,18 @@ def cadastrar_cliente(clientes):
 
     endereco_completo = f'{endereco} - {bairro} - {municipio}/{uf}'
 
-    clientes[cpf] = {
-        'nome': nome,
-        'data_nascimento': data_nascimento,
-        'endereco': endereco_completo
-    }
+    print('\nConfirma o cadastro do cliente?')
+    if (confirmar_operacao() == True):
+        clientes[cpf] = {
+            'nome': nome,
+            'data_nascimento': data_nascimento,
+            'endereco': endereco_completo
+        }
 
-    print('\nCliente cadastrado com sucesso!\n')
-    return 1
+        print('\nCliente cadastrado com sucesso!\n')
+        return 1
+    else:
+        print('Operação cancelada!\n')
 
 
 def listar_clientes(clientes):
@@ -87,7 +92,7 @@ def cadastrar_conta(contas,clientes):
 
             #O cliente já está cadastrado?
             if cpf not in clientes:
-                print('\nErro! O CPF informado não consta entre os cliente cadastrados!\nPrimeiro cadastre o cliente para depois criar sua conta.\n')
+                print('\nErro! O CPF informado não consta entre os clientes cadastrados!\nPrimeiro cadastre o cliente para depois criar sua conta.\n')
                 return 0
             
             else:                
@@ -105,12 +110,16 @@ def cadastrar_conta(contas,clientes):
         'valor_sacado_dia': 0.0
     }
 
-    contas[nro_conta] = conta
+    print('\nConfirma o cadastro da conta corrente?')
+    if (confirmar_operacao() == True):
+        contas[nro_conta] = conta
 
-    os.system('clear')
-    print('Conta corrente criada com sucesso!\n')
-    print('Detalhes da Conta corrente:\n')
-    imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+        os.system('clear')
+        print('Conta corrente criada com sucesso!\n')
+        print('Detalhes da Conta corrente:\n')
+        imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+    else:
+        print('Operação cancelada!\n')
 
 
 def listar_contas(contas,clientes):
@@ -135,6 +144,30 @@ def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
     print(f'Número de Saques Efetuados Hoje: {conta_corrente["qtd_saques_dia"]}')
     print(f'Valor Sacado Hoje: R$ {conta_corrente["valor_sacado_dia"]:0.2f}\n')
 
+
+def login_conta(clientes, contas):
+
+    if len(contas) == 0:
+        print('Ainda não há conta corrente cadastrada.\n')
+    else:
+        print('Agência: 0001')
+        nova_conta = input('Conta Corrente: ')
+        
+        if nova_conta.isdigit() == True:
+            if int(nova_conta) in contas:
+                cpf = contas[int(nova_conta)]["cpf_titular"]
+                print(f'Nome do Titular: {clientes[cpf]["nome"]}\n')
+
+                print(f'Deseja selecionar esta conta?\n')
+                if (confirmar_operacao() == True):
+                    print('Login efetuado com sucesso!\n')
+                    return nova_conta
+                else:
+                    print('Operação cancelada!\n')
+                    return None
+                
+        print('\nNúmero de conta inválido!\nCadastre-a ou consulte a lista de contas já cadastradas.\n')
+    
 
 def depositar(CLIENTE, clientes, contas, extrato):
         while True:
@@ -286,75 +319,106 @@ def confirmar_operacao():
             continue
 
 
-
 menu = '''
-  === Menu de Operações ===
+ ======== Menu de Operações ========
+
+   [1] Selecionar/Trocar de Conta     
+   [2] Depósito
+   [3] Saque
+   [4] Extrato
+   [5] Cadastrar Conta
+   [6] Listar Contas
+   [7] Cadastrar Cliente
+   [8] Listar Clientes
+   [0] Sair
         
-      [1] Depósito
-      [2] Saque
-      [3] Extrato
-      [4] Cadastrar Conta
-      [5] Listar Contas
-      [6] Cadastrar Cliente
-      [7] Listar Clientes
-      [0] Sair
-        
-  =========================      
+ ===================================      
     '''
     
 clientes = {}
 contas = {}
+nro_conta = 0
 extrato = [f'Saldo anterior: R$ {CLIENTE["saldo"]:0.2f}']
+
 
 #Limpa a tela do terminal
 os.system('clear')
 
 #O menu deve ser exibido até que o usuário digite 0 (zero)
 while True:
-        
+
+    if nro_conta != 0:
+        cpf = contas[nro_conta]["cpf_titular"]
+        cabecalho = f'Agência: 0001    Conta Corrente: {nro_conta}    \nTitular: {clientes[cpf]["nome"]}\n'
+        print(cabecalho)
+
     print(menu)
     opcao = input('Selecione a operação desejada: ')
     os.system('clear')
 
     if opcao == '1':
+        print('Opção selecionada: SELECIONAR CONTA CORRENTE - FAZER LOGIN \n')
         
-        while True:
-            print('Opção selecionada: DEPÓSITO \n')
+        nova_conta = login_conta(clientes, contas)
 
-            #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o depósito (return False)
-            if depositar(CLIENTE, clientes, contas, extrato) is not None:
-                break
-
+        if nova_conta is not None:
+            nro_conta = int(nova_conta)
+            #Os registros em extrato são resetados ao trocar de conta - troca de sessão.
+            #extrato = [f'Saldo anterior: R$ {contas[nro_conta]["saldo"]:0.2f}']
+            print(f'Entrou {nro_conta}')
+       
     elif opcao == '2':
 
-        while True:
-            print('Opção selecionada: SAQUE \n')
+        if nro_conta != 0:      
+            while True:
+                print(cabecalho)
+                print('Opção selecionada: DEPÓSITO \n')
 
-            #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o saque (return False)
-            if sacar(CLIENTE, clientes, contas, extrato) is not None:
-                break
-                
+                #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o depósito (return False)
+                if depositar(CLIENTE, clientes, contas, extrato) is not None:
+                    break
+        else:
+            print('\nErro: É necessário selecionar uma conta corrente antes de efetuar um depósito!\n')
+
     elif opcao == '3':
 
-        print('Opção selecionada: EXTRATO \n')
-        imprimir_extrato(extrato)
+        if nro_conta != 0:
+            while True:
+                print(cabecalho)
+                print('Opção selecionada: SAQUE \n')
 
+                #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o saque (return False)
+                if sacar(CLIENTE, clientes, contas, extrato) is not None:
+                    break
+        else:
+            print('\nErro: É necessário selecionar uma conta corrente antes de efetuar um saque!\n')
+                
     elif opcao == '4':
+
+        if nro_conta != 0:
+
+            print(cabecalho)
+            print('Opção selecionada: EXTRATO \n')
+            imprimir_extrato(extrato)
+        else:
+            print('\nErro: É necessário selecionar uma conta corrente antes de visualizar um extrato!\n')
+
+    elif opcao == '5':
 
         print('Opção selecionada: CADASTRAR CONTA \n')
         cadastrar_conta(contas,clientes)
 
-    elif opcao == '5':
+    elif opcao == '6':
 
         print('Opção selecionada: LISTAR CONTAS CORRENTE CADASTRADAS \n')
         listar_contas(contas,clientes)
 
-    elif opcao == '6':
+    elif opcao == '7':
 
         print('Opção selecionada: CADASTRAR CLIENTE \n')
         cadastrar_cliente(clientes)
 
-    elif opcao == '7':
+    elif opcao == '8':
 
         print('Opção selecionada: LISTAR CLIENTES \n')
         listar_clientes(clientes)
@@ -365,7 +429,7 @@ while True:
         break
 
     else:
-        print('Opção inválida!')
+        print('Opção inválida!\n')
 
     input('Pressione qualquer tecla para continuar...')
 
