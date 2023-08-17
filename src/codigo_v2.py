@@ -142,7 +142,7 @@ def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
     print(f'Limite Diário de Saques: {conta_corrente["limite_diario_saques"]}')
     print(f'Limite de Valor por Saque: R$ {conta_corrente["limite_valor_por_saque"]:0.2f}')
     print(f'Número de Saques Efetuados Hoje: {conta_corrente["qtd_saques_dia"]}')
-    print(f'Valor Sacado Hoje: R$ {conta_corrente["valor_sacado_dia"]:0.2f}\n')
+    print(f'Total Sacado Hoje: R$ {conta_corrente["valor_sacado_dia"]:0.2f}\n')
 
 
 def login_conta(clientes, contas):
@@ -253,18 +253,54 @@ def imprimir_extrato(nro_conta, contas, extrato):
         print('===========================\n\n')
 
 
-# Recebe os dados do cliente a partir de seu login no sistema
-# CLIENTE = {
-#     'nome': 'Arthur',
-#     'agencia': 1234,
-#     'conta': '0001-1',
-#     'saldo': 400,
-#     'limite_diario_saques': 3,
-#     'limite_valor_por_saque': 500,
-#     'qtd_saques_dia': 0,
-#     'valor_sacado_dia': 0
-# }
+def transferir(nro_conta, contas, clientes, extrato):
 
+    if len(contas) == 1:
+        print('Erro: Apenas a sua conta está cadastrada! \nÉ necessário haver uma outra conta para ser possível a transferência.\n')
+    else:
+        print('\nInfome os dados da conta de destino:')
+        print('Agência: 0001')
+        outra_conta = input('Conta Corrente: ')
+        
+        if outra_conta.isdigit() == True:
+
+            outra_conta = int(outra_conta)
+            #Confirma se a conta de destino está cadastrada e se é diferente da própria conta do usuário.
+            if (outra_conta in contas) and (outra_conta != nro_conta):
+                outro_cpf = contas[outra_conta]["cpf_titular"]
+                print(f'Nome do Titular: {clientes[outro_cpf]["nome"]}\n')
+
+                while True:
+                    try:
+                        valor = float(input('Valor a ser transferido R$: '))
+                        break
+                    except:
+                        print('Valor inválido! \n')
+                        continue
+
+                print(f'\nConfirma a transferência de R$ {valor:0.2f} para a conta informada acima? \n')                
+                if (confirmar_operacao() == True):
+
+                    #O cliente tem saldo suficiente para a transferência?
+                    if (contas[nro_conta]['saldo'] - valor) >= 0:
+                        contas[nro_conta]['saldo'] -= valor
+                        contas[outra_conta]['saldo'] += valor
+
+                        print(f'\nTransferência efetuada com sucesso! \n')
+                        print(f'Novo saldo de sua conta: R$ {contas[nro_conta]["saldo"]:.2f} \n')
+                        extrato.append(f'Transferência ..R$  {valor:0.2f}')
+                        return True
+                    
+                    else:
+                        print('\nNão foi possível realizar a transferência: Saldo insuficiente!')
+                        print(f'Saldo em sua conta: R$ {contas[nro_conta]["saldo"]:.2f} \n')
+                        return False
+
+                else:
+                    print('Operação cancelada!\n')
+                    return False
+                
+        print('\nNúmero de conta inválido!\nConsulte a lista de contas já cadastradas.\n')
 
 def validar_data_nascimento():
 
@@ -327,10 +363,11 @@ menu = '''
    [2] Depósito
    [3] Saque
    [4] Extrato
-   [5] Cadastrar Conta
-   [6] Listar Contas
-   [7] Cadastrar Cliente
-   [8] Listar Clientes
+   [5] Transferência
+   [6] Cadastrar Conta
+   [7] Listar Contas
+   [8] Cadastrar Cliente
+   [9] Listar Clientes
    [0] Sair
         
  ===================================      
@@ -338,9 +375,9 @@ menu = '''
     
 clientes = {}
 contas = {}
-nro_conta = 0
-#extrato = [f'Saldo anterior: R$ {CLIENTE["saldo"]:0.2f}']
 
+#Zero indica que o usuário não fez o login numa conta
+nro_conta = 0
 
 #Limpa a tela do terminal
 os.system('clear')
@@ -348,9 +385,7 @@ os.system('clear')
 #O menu deve ser exibido até que o usuário digite 0 (zero)
 while True:
 
-    if nro_conta != 0:
-        cpf = contas[nro_conta]["cpf_titular"]
-        cabecalho = f'Agência: 0001    Conta Corrente: {nro_conta}    \nTitular: {clientes[cpf]["nome"]}\n'
+    if nro_conta != 0:     
         print(cabecalho)
 
     print(menu)
@@ -367,6 +402,9 @@ while True:
             
             #Os registros em extrato são resetados ao trocar de conta - troca de sessão.
             extrato = [f'Saldo anterior: R$ {contas[nro_conta]["saldo"]:0.2f}']
+
+            cpf = contas[nro_conta]["cpf_titular"]
+            cabecalho = f'Agência: 0001    Conta Corrente: {nro_conta}    \nTitular: {clientes[cpf]["nome"]}\n'
        
     elif opcao == '2':
 
@@ -406,20 +444,30 @@ while True:
 
     elif opcao == '5':
 
+        if nro_conta != 0:
+
+            print(cabecalho)
+            print('Opção selecionada: TRANSFERIR VALORES ENTRE CONTAS \n')
+            transferir(nro_conta, contas, clientes, extrato)
+        else:
+            print('\nErro: É necessário fazer o login em sua conta corrente para fazer uma transferência!\n')
+
+    elif opcao == '6':
+
         print('Opção selecionada: CADASTRAR CONTA \n')
         cadastrar_conta(contas,clientes)
 
-    elif opcao == '6':
+    elif opcao == '7':
 
         print('Opção selecionada: LISTAR CONTAS CORRENTE CADASTRADAS \n')
         listar_contas(contas,clientes)
 
-    elif opcao == '7':
+    elif opcao == '8':
 
         print('Opção selecionada: CADASTRAR CLIENTE \n')
         cadastrar_cliente(clientes)
 
-    elif opcao == '8':
+    elif opcao == '9':
 
         print('Opção selecionada: LISTAR CLIENTES \n')
         listar_clientes(clientes)
