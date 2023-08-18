@@ -1,0 +1,47 @@
+{
+    "1": {
+        "agencia": "0001",
+        "cpf_titular": "12345678910",
+        "saldo": 460.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 2,
+        "valor_sacado_dia": 1000.0
+    },
+    "2": {
+        "agencia": "0001",
+        "cpf_titular": "12345678910",
+        "saldo": 685.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 1,
+        "valor_sacado_dia": 390.0
+    },
+    "3": {
+        "agencia": "0001",
+        "cpf_titular": "12345678911",
+        "saldo": 900.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 0,
+        "valor_sacado_dia": 0.0
+    },
+    "4": {
+        "agencia": "0001",
+        "cpf_titular": "12312312312",
+        "saldo": 3670.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 1,
+        "valor_sacado_dia": 150.0
+    },
+    "5": {
+        "agencia": "0001",
+        "cpf_titular": "12345678911",
+        "saldo": 150.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 0,
+        "valor_sacado_dia": 0.0
+    }
+}

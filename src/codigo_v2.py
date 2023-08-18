@@ -1,6 +1,34 @@
 import os
 from datetime import datetime
 import re
+import json
+
+
+def carregar_dados():
+
+    # Verifica se o arquivo JSON existe
+    if os.path.exists('clientes.json'):
+        with open('clientes.json', 'r') as arquivo1:
+            clientes = json.load(arquivo1)
+    else:
+        clientes = {}
+
+    if os.path.exists('contas.json'):
+        with open('contas.json', 'r') as arquivo2:
+            contas = json.load(arquivo2)
+    else:
+        contas = {}
+
+    return clientes, contas
+
+
+def salvar_dados(clientes, contas):
+    
+    with open('clientes.json', 'w') as arquivo1:
+        json.dump(clientes, arquivo1, indent=4)
+
+    with open('contas.json', 'w') as arquivo2:
+        json.dump(contas, arquivo2, indent=4)
 
 
 def cadastrar_cliente(clientes):
@@ -74,7 +102,7 @@ def cadastrar_conta(contas,clientes):
         return 0
     
     #Gera o número da nova conta somando 1 ao número da última conta cadastrada ou inicia em 1 se não houver nenhuma conta.
-    nro_conta = (max(contas.keys()) + 1) if (len(contas) > 0) else 1
+    nro_conta = (max(map(int, contas.keys())) + 1) if contas else 1
     agencia = '0001'
 
     print(f'Agência: {agencia}')
@@ -154,8 +182,8 @@ def login_conta(clientes, contas):
         nova_conta = input('Conta Corrente: ')
         
         if nova_conta.isdigit() == True:
-            if int(nova_conta) in contas:
-                cpf = contas[int(nova_conta)]["cpf_titular"]
+            if str(nova_conta) in contas:
+                cpf = contas[str(nova_conta)]["cpf_titular"]
                 print(f'Nome do Titular: {clientes[cpf]["nome"]}\n')
 
                 print(f'Deseja selecionar esta conta?\n')
@@ -264,7 +292,7 @@ def transferir(nro_conta, contas, clientes, extrato):
         
         if outra_conta.isdigit() == True:
 
-            outra_conta = int(outra_conta)
+            outra_conta = str(outra_conta)
             #Confirma se a conta de destino está cadastrada e se é diferente da própria conta do usuário.
             if (outra_conta in contas) and (outra_conta != nro_conta):
                 outro_cpf = contas[outra_conta]["cpf_titular"]
@@ -372,15 +400,16 @@ menu = '''
         
  ===================================      
     '''
+
+#Limpa a tela do terminal
+os.system('clear')
     
-clientes = {}
-contas = {}
+clientes, contas = carregar_dados()
 
 #Zero indica que o usuário não fez o login numa conta
 nro_conta = 0
 
-#Limpa a tela do terminal
-os.system('clear')
+
 
 #O menu deve ser exibido até que o usuário digite 0 (zero)
 while True:
@@ -398,7 +427,8 @@ while True:
         nova_conta = login_conta(clientes, contas)
 
         if nova_conta is not None:
-            nro_conta = int(nova_conta)
+            #nro_conta = int(nova_conta)
+            nro_conta = nova_conta
             
             #Os registros em extrato são resetados ao trocar de conta - troca de sessão.
             extrato = [f'Saldo anterior: R$ {contas[nro_conta]["saldo"]:0.2f}']
@@ -473,6 +503,8 @@ while True:
         listar_clientes(clientes)
 
     elif opcao == '0':
+
+        salvar_dados(clientes, contas)
         print('\nAgradecemos por utilizar os nossos serviços! Tenha um bom dia! \n')
         print('=== Sessão Encerrada === \n')
         break

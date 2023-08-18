@@ -1,0 +1,17 @@
+{
+    "12345678910": {
+        "nome": "Arthur Silva",
+        "data_nascimento": "30/06/1999",
+        "endereco": "Rua Um, 1250 - Jardins - S\u00e3o Paulo/SP"
+    },
+    "12345678911": {
+        "nome": "Yui Souza",
+        "data_nascimento": "06/02/1987",
+        "endereco": "Av. Rio Preto, 2560 - Centro - Santos/SP"
+    },
+    "12312312312": {
+        "nome": "Max Augusto de Andrade",
+        "data_nascimento": "01/12/1995",
+        "endereco": "Avenida dos Estudantes, 60 - Jd. dos Eucaliptos - Varginha/MG"
+    }
+}
