@@ -31,6 +31,9 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
 - As operações bancárias devem ser **implementadas como funções**, e deve-se explorar as diferentes formas de passagem de parâmetros em Python (`positional only`, `positional or keyword` e `keyword only`)
 
 ---
+### Desenvolvimento:
+
+---
 ### Implementação da solução:
 
 Para executar o [código](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py), baixe e extraia este repositório em sua máquina. Tendo o Python já instalado, digite no terminal (ou *prompt* de comando):
@@ -40,7 +43,7 @@ Para executar o [código](https://github.com/crobertocamilo/sistema_bancario2-co
 <br>
 O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário já esteja logado, no cabeçalho serão exibidas as informações sobre a conta corrente.  
 
-<br>
+<br>  
 
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/menu_operacoes.png?raw=true" alt="Menu de operações" width=39%/>
@@ -131,5 +134,52 @@ Figura 6 - Confirmação de cadastro de conta corrente.
 
 #### Realizando operações
 
-Teste  
+Para realizar qualquer operação bancária, é necessário estar logado numa conta corrente (ter selecionado uma conta). Ao fim de cada operação é solicitada a confirmação da transação. Caso o usuário selecione *NÃO*, nenhuma modifição é aplicada à conta.  
+
+Para transferir valor entre contas também é necessário informar uma conta da destino válida:
+
+<br>
+
+<div align="center">
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/tranferencia.png?raw=true" alt="Transferência entre contas" width=55%/>
+</div>
+<div align="center">
+Figura 7 - Transferindo valores entre contas.
+</div>
+
+<br>  
+
+A transferência terá efeito sobre o saldo das duas contas, o que pode ser visualizado listando as contas cadastradas:
+
+<br>
+
+<div align="center">
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/contas_cadastradas.png?raw=true" alt="Lista de contas cadastradas" width=50%/>
+</div>
+<div align="center">  
+
+##### Figura 8 - Listando as contas cadastradas.
+</div>
+
+<br> 
+
+O extrato reflete todas operações realizadas durante a seção, e pode ser solicitado a qualquer momento:
+
+<br>
+
+<div align="center">
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/extrato.png?raw=true" alt="Extrato" width=45%/>
+</div>
+<div align="center">  
+
+##### Figura 9 - Extrato de operações.
+</div>
+
+<br>  
+
+---
+### Autor
+[Carlos Roberto de Souza Camilo](https://www.linkedin.com/in/carlos-roberto-camilo/)
+
+
 
