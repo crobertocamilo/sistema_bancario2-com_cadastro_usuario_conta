@@ -33,6 +33,8 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
 ---
 ### Desenvolvimento:
 
+Funções
+
 ```Python
 def carregar_dados():
 def salvar_dados(clientes, contas):
@@ -42,19 +44,51 @@ def cadastrar_conta(contas,clientes):
 def listar_contas(contas,clientes):
 def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
 def login_conta(clientes, contas):
-
-def depositar(nro_conta, contas, extrato):
-
-def sacar(*, contas, extrato, nro_conta):
-
-def imprimir_extrato(nro_conta, contas, extrato):
-
+def depositar(nro_conta, contas, extrato):  #positional only
+def sacar(*, contas, extrato, nro_conta):   #keyword only           
+def imprimir_extrato(nro_conta, /, contas, extrato):    #positional and keyword
 def transferir(nro_conta, contas, clientes, extrato):
-  
 def validar_data_nascimento():
 def calcular_idade(data_nascimento):
 def confirmar_operacao():
 
+```  
+
+Registro clientes:
+
+```json
+{
+    "12345678910": {
+        "nome": "Arthur Silva",
+        "data_nascimento": "30/06/1999",
+        "endereco": "Rua Um, 1250 - Jardins - Sao Paulo/SP"
+    }
+}
+```  
+
+Registro contas:
+
+```json
+{
+    "1": {
+        "agencia": "0001",
+        "cpf_titular": "12345678910",
+        "saldo": 735.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 3,
+        "valor_sacado_dia": 1225.0
+    },
+    "2": {
+        "agencia": "0001",
+        "cpf_titular": "12345678910",
+        "saldo": 1335.0,
+        "limite_diario_saques": 3,
+        "limite_valor_por_saque": 500,
+        "qtd_saques_dia": 1,
+        "valor_sacado_dia": 390.0
+    }
+}
 ```
 
 
@@ -69,14 +103,14 @@ Para executar o [código](https://github.com/crobertocamilo/sistema_bancario2-co
 O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário já esteja logado, no cabeçalho serão exibidas as informações sobre a conta corrente.  
 
 <br>  
+<br>  
 
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/menu_operacoes.png?raw=true" alt="Menu de operações" width=39%/>
 </div>
-
 <div align="center">  
 
-#### Figura 1 - Menu de opções 
+##### Figura 1 - Menu de opções 
 </div>
   
 <br>
@@ -104,7 +138,7 @@ Ao cadastrar um cliente, é necessário informar um CPF com 11 dígitos e uma da
 </div>
 <div align="center">  
 
-#### Figura 2 - Validações no cadastro de um cliente 
+##### Figura 2 - Validações no cadastro de um cliente 
 </div>
 
 <br>
@@ -117,7 +151,7 @@ Uma verificação adicional é que o sistema não permite o cadastro de dois usu
 </div>
 <div align="center">  
 
-#### Figura 3 - Dois clientes não podem ter o mesmo CPF. 
+##### Figura 3 - Dois clientes não podem ter o mesmo CPF. 
 </div>
 
 <br>
@@ -129,7 +163,7 @@ A opção de listar clientes mostra todos os clientes cadastrados, utilizando a 
 </div>
 <div align="center">  
 
-#### Figura 4 - Listando os cliente cadastrados.
+##### Figura 4 - Listando os cliente cadastrados.
 </div>
 
 <br></br>
@@ -144,7 +178,7 @@ O número das contas correntes cadastradas é **sequencial e auto incrementado**
 </div>
 <div align="center">  
 
-#### Figura 5 - Erro ao cadastrar a conta antes de cadastrar o cliente.
+##### Figura 5 - Erro ao cadastrar a conta antes de cadastrar o cliente.
 </div>
 
 <br>
@@ -158,7 +192,7 @@ Informado um CPF válido, o sistema mostra o nome cliente e solicita a confirma�
 </div>
 <div align="center">  
 
-#### Figura 6 - Confirmação de cadastro de conta corrente.
+##### Figura 6 - Confirmação de cadastro de conta corrente.
 </div>
 
 <br></br>
@@ -176,7 +210,7 @@ Para transferir valor entre contas também é necessário informar uma conta da 
 </div>
 <div align="center">  
 
-#### Figura 7 - Transferindo valores entre contas.
+##### Figura 7 - Transferindo valores entre contas.
 </div>
 
 <br>  
@@ -190,7 +224,7 @@ A transferência terá efeito sobre o saldo das duas contas, o que pode ser visu
 </div>
 <div align="center">  
 
-##### Figura 8 - Listando as contas cadastradas.
+###### Figura 8 - Listando as contas cadastradas.
 </div>
 
 <br> 
@@ -204,7 +238,7 @@ O extrato reflete todas operações realizadas durante a seção, e pode ser sol
 </div>
 <div align="center">  
 
-##### Figura 9 - Extrato de operações.
+###### Figura 9 - Extrato de operações.
 </div>
 
 <br>  
