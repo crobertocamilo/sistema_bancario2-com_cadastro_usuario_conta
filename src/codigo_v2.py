@@ -221,7 +221,8 @@ def depositar(nro_conta, contas, extrato):
                 return False
                                    
 
-def sacar(nro_conta, contas, extrato):
+#Argumentos passados como keywork only - a ordem não importa
+def sacar(*, contas, extrato, nro_conta):
         
         #Cliente já excedeu o limite de saques no dia?
         if (contas[nro_conta]["qtd_saques_dia"] >= contas[nro_conta]["limite_diario_saques"]):
@@ -266,7 +267,7 @@ def sacar(nro_conta, contas, extrato):
                     return False
                 
 
-def imprimir_extrato(nro_conta, contas, extrato):
+def imprimir_extrato(nro_conta, /, contas, extrato):
         print('==== Extrato da Sessão ====\n')
 
         #Houve alguma movientação durante a seção?
@@ -457,7 +458,7 @@ while True:
                 print('Opção selecionada: SAQUE \n')
 
                 #Operação é repetida até que o usuário digite um valor válido e confirme (return True) ou não o saque (return False)
-                if sacar(nro_conta, contas, extrato) is not None:
+                if sacar(contas = contas, extrato = extrato, nro_conta = nro_conta) is not None:
                     break
         else:
             print('\nErro: É necessário selecionar uma conta corrente antes de efetuar um saque!\n')
@@ -468,7 +469,7 @@ while True:
 
             print(cabecalho)
             print('Opção selecionada: EXTRATO \n')
-            imprimir_extrato(nro_conta, contas, extrato)
+            imprimir_extrato(nro_conta, contas = contas, extrato = extrato)
         else:
             print('\nErro: É necessário selecionar uma conta corrente antes de visualizar um extrato!\n')
 
