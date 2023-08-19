@@ -11,7 +11,7 @@ Evento promovido pela [Digital Innovation One - DIO](https://www.dio.me/en), com
 
 ### Objetivo
 
-Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de clientes e contas e que implemente as principais operações bancárias (depósito, saque, transferência entre contas, extrato de operações). As contas correntes devem ser vinculados ao CPF do cliente.
+Desenvolver uma aplicação em **Python** que possibilite o cadastramento de clientes e contas e que implemente as principais operações bancárias (depósito, saque, transferência entre contas, extrato de operações). As contas correntes devem ser vinculadas ao CPF do cliente.
 
 <br>  
 
@@ -21,13 +21,13 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
   
 - Clientes devem ser cadastrados com *CPF, nome, data de nascimento e endereço completo*;
    
-- Para **cadastrar uma conta corrente, é necessário vinculá-la ao CPF de um cliente já cadastrado**. O incremento no número da conta deve ser automático (número da última conta cadastrada + 1), a agência pode ser fixa em "0001", e outras informações pertinentes como saldo, limite diário de saques, etc. devem ser registradas;
+- Para **cadastrar uma conta corrente, é necessário vinculá-la ao CPF de um cliente já cadastrado**. O incremento no número da conta deve ser automático (número da última conta cadastrada + 1), a agência pode ser fixa em "0001", e outras informações pertinentes como saldo, limite diário de saques, etc. podem ser registradas;
   
 - Deve ser possível depositar valores positivos (sem limite de valor ou número de operações);
   
 - O sistema deve permitir até 3 saques por dia, sendo o valor máximo para cada saque R$ 500. Se o usuário não tiver saldo suficiente na conta, não permitir o saque;
   
-- A opção extrato deve listar todas as operações de depósito e saque realizadas durante a seção, além do saldo da conta. O extrato pode ser solicitado a qualquer momento;
+- A opção extrato deve listar todas as operações de depósito, saque ou transferência realizadas durante a seção, além do saldo da conta. O extrato pode ser solicitado a qualquer momento;
   
 - As operações bancárias devem ser **implementadas como funções**, e deve-se explorar as diferentes formas de passagem de parâmetros em Python (`positional only`, `positional or keyword` e `keyword only`)
 
@@ -36,7 +36,7 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
 
 O código desenvolvido está na pasta [src](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/tree/main/src) e utiliza **funções em Python** para implementar tanto os serviços principais (cadastrar cliente ou conta, depósito, saque, etc.) quanto ações secundárias, como validar uma data de nascimento.
 
-A utilização de funções permite uma melhor estruturação do código, deixando-o mais organizado, e reduz a redundância de linhas de código pois uma mesma função pode ser invocada diversas vezes ao longo do programa. No bloco abaixo, são apresentadas as funções criadas para a solução (apenas sua chamada, o [código interno] foi omitido - ver o [arquivo completo](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py) para detalhes).
+A utilização de funções permite uma melhor estruturação do código, deixando-o mais organizado, e reduz a redundância de linhas de código pois uma mesma função pode ser invocada diversas vezes ao longo do programa. No bloco abaixo, são apresentadas as funções criadas para a solução (apenas sua chamada, o código interno foi omitido - ver o [arquivo completo](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py) para detalhes).
 
 ```Python
 def carregar_dados():
@@ -65,7 +65,7 @@ Utilizando as funções:
 #Sem passagem de parâmetros
 clientes, contas = carregar_dados()
 
-#Argumentos passados pela posição (positional only)
+#Argumentos passados por posição (positional only)
 depositar(nro_conta, contas, extrato)  
 
 #Argumentos passados com identificação explícita da variável (keyword only)
@@ -74,9 +74,9 @@ sacar(contas = contas, extrato = extrato, nro_conta = nro_conta)
 ```
 <br>  
 
-A partir dos dados dos clientes e contas corrente cadastradas é criado um banco de dados a partir de arquivos em formato **JSON**.
+A partir dos dados dos clientes e contas corrente cadastradas é criado um banco de dados estruturado em arquivos no formato **JSON**.
 
-Exemplo de registro de clientes (arquivo [clientes.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/clientes.json)) com o CPF sendo a chave e um dicionário interno para nome, data de nascimento e endereço:
+Exemplo de registro de clientes (arquivo [clientes.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/clientes.json)) com o CPF sendo a chave de dicionário interno para nome, data de nascimento e endereço:
 
 ```json
 {
@@ -89,7 +89,7 @@ Exemplo de registro de clientes (arquivo [clientes.json](https://github.com/crob
 ```  
 <br>  
 
-Para as contas correntes, a chave é o número da conta (que é auto incrementado pelo programa e sequencial), e o CPF do cliente é vinculado a um cliente já cadastrado, implementando uma integridade de chave estrangeira via aplicação. Exemplo de registro de contas (arquivo [contas.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/contas.json)):
+Para as contas correntes, a chave é o número da conta (que é auto incrementado pelo programa e sequencial), e o CPF é vinculado a um cliente já cadastrado, implementando integridade referencial de chave estrangeira via aplicação. Exemplo de registro de contas (arquivo [contas.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/contas.json)):
 
 ```json
 {
@@ -119,7 +119,7 @@ Para as contas correntes, a chave é o número da conta (que é auto incrementad
 
 Para executar o [código](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py), baixe e extraia este repositório em sua máquina. Tendo o Python já instalado, digite no terminal (ou *prompt* de comando):
 
-<center> `python src/codigo.py` ou `python3 src/codigo.py` </center>  
+`python src/codigo.py` ou `python3 src/codigo.py`
 
 <br>
 O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário já esteja logado, no cabeçalho serão exibidas as informações sobre a conta corrente.  
@@ -140,18 +140,18 @@ O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário
 Antes de realizar operações bancárias (depósito, saque, extrato, transferência), o usuário precisa:
 
 1. **Cadastrar um cliente**;
-2. **Cadastar uma conta vinculando-a ao CPF de um cliente já cadastrado**;
+2. **Cadastar uma conta, vinculando-a ao CPF de um cliente já cadastrado**;
 3. **Selecionar uma conta já cadastrada (fazer *login*)**.  
    
 <br>  
 
-Foi aplicada validação à todas as entradas de dados (*inputs*) de dados utilizando a estrutura `try... except`.
+Foi aplicada validação à todas as entradas de dados (*inputs*) utilizando a estrutura `try... except`.
 
 <br>  
 
 ### Cadastrando um cliente:  
 
-Ao cadastrar um cliente, é necessário informar um CPF com 11 dígitos e uma data de nascimento válida:  
+Ao cadastrar um cliente, é necessário informar um CPF (com 11 dígitos) e uma data de nascimento válida:  
 
 <br>
 
@@ -178,7 +178,7 @@ Uma verificação adicional é que o sistema não permite o cadastro de dois usu
 
 <br>
 
-A opção de listar clientes mostra todos os clientes cadastrados, utilizando a biblioteca `datetime` para o cálculo da idade:
+A opção de listar clientes mostra todos os clientes cadastrados, empregando a biblioteca `datetime` para o cálculo da idade:
 
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/clientes_cadastrados.png?raw=true" alt="Lista de clientes cadastrados" width=60%/>
@@ -192,7 +192,7 @@ A opção de listar clientes mostra todos os clientes cadastrados, utilizando a 
 
 ### Cadastrando uma conta corrente:
 
-O número das contas correntes cadastradas é **sequencial e auto incrementado**. Por padrão, todas as contas estão vinculadas à Agência 0001. Para criar uma nova conta é necessário informar o CPF de um cliente já cadastrado no sistema (chave estrangeira):
+O número das contas correntes cadastradas é **sequencial e auto incrementado**. Por padrão, todas as contas estão vinculadas à *Agência 0001*. Para criar uma nova conta é necessário informar o CPF de um cliente já cadastrado no sistema (chave estrangeira):
 
 <br>
 <div align="center">
@@ -205,7 +205,7 @@ O número das contas correntes cadastradas é **sequencial e auto incrementado**
 
 <br>
 
-Informado um CPF válido, o sistema mostra o nome cliente e solicita a confirmação da criação da conta. As demais definições da conta (número de saques por dia, limite de valor por saque, etc.) seguem o padrão definido nas regra de negócio.
+Informado um CPF válido, o sistema mostra o nome do cliente e solicita a confirmação da criação da conta. As demais definições da conta (número de saques por dia, limite de valor por saque, etc.) seguem o padrão definido nas regra de negócio.
 
 <br>
 
@@ -246,7 +246,7 @@ A transferência terá efeito sobre o saldo das duas contas, o que pode ser visu
 </div>
 <div align="center">  
 
-###### Figura 8 - Listando as contas cadastradas.
+##### Figura 8 - Listando as contas cadastradas.
 </div>
 
 <br> 
@@ -260,7 +260,7 @@ O extrato reflete todas operações realizadas durante a seção, e pode ser sol
 </div>
 <div align="center">  
 
-###### Figura 9 - Extrato de operações.
+##### Figura 9 - Extrato de operações.
 </div>
 
 <br>  
