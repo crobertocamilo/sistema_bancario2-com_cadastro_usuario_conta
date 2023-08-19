@@ -33,6 +33,31 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
 ---
 ### Desenvolvimento:
 
+```Python
+def carregar_dados():
+def salvar_dados(clientes, contas):
+def cadastrar_cliente(clientes):
+def listar_clientes(clientes):
+def cadastrar_conta(contas,clientes):
+def listar_contas(contas,clientes):
+def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
+def login_conta(clientes, contas):
+
+def depositar(nro_conta, contas, extrato):
+
+def sacar(*, contas, extrato, nro_conta):
+
+def imprimir_extrato(nro_conta, contas, extrato):
+
+def transferir(nro_conta, contas, clientes, extrato):
+  
+def validar_data_nascimento():
+def calcular_idade(data_nascimento):
+def confirmar_operacao():
+
+```
+
+
 ---
 ### Implementação da solução:
 
@@ -49,13 +74,14 @@ O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/menu_operacoes.png?raw=true" alt="Menu de operações" width=39%/>
 </div>
 
-<div align="center">
-Figura 1 - Menu de opções 
+<div align="center">  
+
+#### Figura 1 - Menu de opções 
 </div>
   
 <br>
 
-Para realizar operações bancárias (depósito, saque, extrato, transferência), o usuário deve:
+Antes de realizar operações bancárias (depósito, saque, extrato, transferência), o usuário precisa:
 
 1. **Cadastrar um cliente**;
 2. **Cadastar uma conta vinculando-a ao CPF de um cliente já cadastrado**;
@@ -65,9 +91,9 @@ Para realizar operações bancárias (depósito, saque, extrato, transferência)
 
 Foi aplicada validação à todas as entradas de dados (*inputs*) de dados utilizando a estrutura `try... except`.
 
-<br> </br> 
+<br>  
 
-#### Cadastrando um cliente  
+### Cadastrando um cliente:  
 
 Ao cadastrar um cliente, é necessário informar um CPF com 11 dígitos e uma data de nascimento válida:  
 
@@ -76,8 +102,9 @@ Ao cadastrar um cliente, é necessário informar um CPF com 11 dígitos e uma da
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/validacao_data_nascimento.png?raw=true" alt="Cadastrando um cliente" width=48%/>
 </div>
-<div align="center">
-Figura 2 - Validações no cadastro de um cliente 
+<div align="center">  
+
+#### Figura 2 - Validações no cadastro de um cliente 
 </div>
 
 <br>
@@ -88,8 +115,9 @@ Uma verificação adicional é que o sistema não permite o cadastro de dois usu
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastro_cliente_erro.png?raw=true" alt="Validação CPF" width=42%/>
 </div>
-<div align="center">
-Figura 3 - Dois clientes não podem ter o mesmo CPF. 
+<div align="center">  
+
+#### Figura 3 - Dois clientes não podem ter o mesmo CPF. 
 </div>
 
 <br>
@@ -99,22 +127,24 @@ A opção de listar clientes mostra todos os clientes cadastrados, utilizando a 
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/clientes_cadastrados.png?raw=true" alt="Lista de clientes cadastrados" width=60%/>
 </div>
-<div align="center">
-Figura 4 - Listando os cliente cadastrados.
+<div align="center">  
+
+#### Figura 4 - Listando os cliente cadastrados.
 </div>
 
 <br></br>
 
-#### Cadastrando uma conta corrente
+### Cadastrando uma conta corrente:
 
 O número das contas correntes cadastradas é **sequencial e auto incrementado**. Por padrão, todas as contas estão vinculadas à Agência 0001. Para criar uma nova conta é necessário informar o CPF de um cliente já cadastrado no sistema (chave estrangeira):
 
 <br>
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastrar_conta_erro.png?raw=true" alt="Erro cadastro conta" width=52%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastrar_conta_erro.png?raw=true" alt="Erro cadastro conta" width=56%/>
 </div>
-<div align="center">
-Figura 5 - Erro ao cadastrar a conta antes de cadastrar o cliente.
+<div align="center">  
+
+#### Figura 5 - Erro ao cadastrar a conta antes de cadastrar o cliente.
 </div>
 
 <br>
@@ -126,13 +156,14 @@ Informado um CPF válido, o sistema mostra o nome cliente e solicita a confirma�
 <div align="center">
   <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastro_conta.png?raw=true" alt="Cadastrando nova conta" width=48%/>
 </div>
-<div align="center">
-Figura 6 - Confirmação de cadastro de conta corrente.
+<div align="center">  
+
+#### Figura 6 - Confirmação de cadastro de conta corrente.
 </div>
 
 <br></br>
 
-#### Realizando operações
+### Realizando operações:
 
 Para realizar qualquer operação bancária, é necessário estar logado numa conta corrente (ter selecionado uma conta). Ao fim de cada operação é solicitada a confirmação da transação. Caso o usuário selecione *NÃO*, nenhuma modifição é aplicada à conta.  
 
@@ -141,10 +172,11 @@ Para transferir valor entre contas também é necessário informar uma conta da 
 <br>
 
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/tranferencia.png?raw=true" alt="Transferência entre contas" width=55%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/tranferencia.png?raw=true" alt="Transferência entre contas" width=58%/>
 </div>
-<div align="center">
-Figura 7 - Transferindo valores entre contas.
+<div align="center">  
+
+#### Figura 7 - Transferindo valores entre contas.
 </div>
 
 <br>  
@@ -154,7 +186,7 @@ A transferência terá efeito sobre o saldo das duas contas, o que pode ser visu
 <br>
 
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/contas_cadastradas.png?raw=true" alt="Lista de contas cadastradas" width=50%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/contas_cadastradas.png?raw=true" alt="Lista de contas cadastradas" width=48%/>
 </div>
 <div align="center">  
 
@@ -168,7 +200,7 @@ O extrato reflete todas operações realizadas durante a seção, e pode ser sol
 <br>
 
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/extrato.png?raw=true" alt="Extrato" width=45%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/extrato.png?raw=true" alt="Extrato" width=40%/>
 </div>
 <div align="center">  
 
@@ -179,7 +211,7 @@ O extrato reflete todas operações realizadas durante a seção, e pode ser sol
 
 ---
 ### Autor
-[Carlos Roberto de Souza Camilo](https://www.linkedin.com/in/carlos-roberto-camilo/)
-
+[Carlos Roberto de Souza Camilo](https://www.linkedin.com/in/carlos-roberto-camilo/)  
+Ago. 23
 
 
