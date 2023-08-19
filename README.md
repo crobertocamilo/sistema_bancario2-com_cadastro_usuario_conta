@@ -13,6 +13,7 @@ Evento promovido pela [Digital Innovation One - DIO](https://www.dio.me/en), com
 
 Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de clientes e contas e que implemente as principais operações bancárias (depósito, saque, transferência entre contas, extrato de operações). As contas correntes devem ser vinculados ao CPF do cliente.
 
+<br>  
 
 **Regras de negócio:**
 
@@ -33,7 +34,9 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
 ---
 ### Desenvolvimento:
 
-Funções
+O código desenvolvido está na pasta [src](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/tree/main/src) e utiliza **funções em Python** para implementar tanto os serviços principais (cadastrar cliente ou conta, depósito, saque, etc.) quanto ações secundárias, como validar uma data de nascimento.
+
+A utilização de funções permite uma melhor estruturação do código, deixando-o mais organizado, e reduz a redundância de linhas de código pois uma mesma função pode ser invocada diversas vezes ao longo do programa. No bloco abaixo, são apresentadas as funções criadas para a solução (apenas sua chamada, o [código interno] foi omitido - ver o [arquivo completo](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py) para detalhes).
 
 ```Python
 def carregar_dados():
@@ -46,15 +49,30 @@ def imprimir_detalhes_conta(conta_corrente,nro_conta,clientes):
 def login_conta(clientes, contas):
 def depositar(nro_conta, contas, extrato):  #positional only
 def sacar(*, contas, extrato, nro_conta):   #keyword only           
-def imprimir_extrato(nro_conta, /, contas, extrato):    #positional and keyword
+def imprimir_extrato(nro_conta, /, contas, extrato):  #positional and keyword
 def transferir(nro_conta, contas, clientes, extrato):
 def validar_data_nascimento():
 def calcular_idade(data_nascimento):
 def confirmar_operacao():
 
 ```  
+Utilizando as funções:
 
-Registro clientes:
+```Python  
+
+#Sem passagem de parâmetros
+clientes, contas = carregar_dados()
+
+#Argumentos passados pela posição (positional only)
+depositar(nro_conta, contas, extrato)  
+
+#Argumentos passados com identificação explícita da variável (keyword only) - se a posição dos argumentos for alterada, não é necessário corrigir no código da função
+sacar(contas = contas, extrato = extrato, nro_conta = nro_conta)
+```
+
+A partir dos dados dos clientes e contas corrente cadastradas é criado um banco de dados a partir de arquivos em formato **JSON**.
+
+Exemplo de registro clientes (arquivo [clients.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/clientes.json)) com o CPF sendo a chave e um dicionário interno para nome, data de nascimento e endereço:
 
 ```json
 {
@@ -66,7 +84,7 @@ Registro clientes:
 }
 ```  
 
-Registro contas:
+Para as contas correntes, a chave é o número da conta (que é auto incrementado pelo programa e sequencial), e o CPF do cliente é vinculado a um cliente já cadastrado, implementando uma integridade de chave estrangeira via aplicação. Exemplo de registro contas correntes (arquivo [contas.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/contas.json)):
 
 ```json
 {
@@ -82,7 +100,7 @@ Registro contas:
     "2": {
         "agencia": "0001",
         "cpf_titular": "12345678910",
-        "saldo": 1335.0,
+        "saldo": 1320.0,
         "limite_diario_saques": 3,
         "limite_valor_por_saque": 500,
         "qtd_saques_dia": 1,
@@ -90,7 +108,6 @@ Registro contas:
     }
 }
 ```
-
 
 ---
 ### Implementação da solução:
