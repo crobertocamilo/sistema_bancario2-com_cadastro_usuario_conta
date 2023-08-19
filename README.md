@@ -35,21 +35,21 @@ Desenvolver uma aplicação que em **Python** que possibilite o cadastramento de
 
 Para executar o [código](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py), baixe e extraia este repositório em sua máquina. Tendo o Python já instalado, digite no terminal (ou *prompt* de comando):
 
-<center> `python src/codigo.py` ou `python3 src/codigo.py` </center>
+`python src/codigo.py` ou `python3 src/codigo.py`
 
 <br>
 O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário já esteja logado, no cabeçalho serão exibidas as informações sobre a conta corrente.  
 
+<br>
 
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/menu_operacoes.png?raw=true" alt="Menu de operações" width=40%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/menu_operacoes.png?raw=true" alt="Menu de operações" width=39%/>
 </div>
 
 <div align="center">
 Figura 1 - Menu de opções 
 </div>
   
-
 <br>
 
 Para realizar operações bancárias (depósito, saque, extrato, transferência), o usuário deve:
@@ -58,10 +58,11 @@ Para realizar operações bancárias (depósito, saque, extrato, transferência)
 2. **Cadastar uma conta vinculando-a ao CPF de um cliente já cadastrado**;
 3. **Selecionar uma conta já cadastrada (fazer *login*)**.  
    
-<br>
+<br>  
+
 Foi aplicada validação à todas as entradas de dados (*inputs*) de dados utilizando a estrutura `try... except`.
 
-<br>  
+<br> </br> 
 
 #### Cadastrando um cliente  
 
@@ -70,10 +71,10 @@ Ao cadastrar um cliente, é necessário informar um CPF com 11 dígitos e uma da
 <br>
 
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/validacao_data_nascimento.png?raw=true" alt="Cadastrando um cliente" width=45%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/validacao_data_nascimento.png?raw=true" alt="Cadastrando um cliente" width=48%/>
 </div>
 <div align="center">
-Figura 2 - **Validações no cadastro de um cliente** 
+Figura 2 - Validações no cadastro de um cliente 
 </div>
 
 <br>
@@ -82,7 +83,7 @@ Uma verificação adicional é que o sistema não permite o cadastro de dois usu
 
 <br>
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastro_cliente_erro.png?raw=true" alt="Validação CPF" width=45%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastro_cliente_erro.png?raw=true" alt="Validação CPF" width=42%/>
 </div>
 <div align="center">
 Figura 3 - Dois clientes não podem ter o mesmo CPF. 
@@ -99,13 +100,15 @@ A opção de listar clientes mostra todos os clientes cadastrados, utilizando a 
 Figura 4 - Listando os cliente cadastrados.
 </div>
 
+<br></br>
+
 #### Cadastrando uma conta corrente
 
 O número das contas correntes cadastradas é **sequencial e auto incrementado**. Por padrão, todas as contas estão vinculadas à Agência 0001. Para criar uma nova conta é necessário informar o CPF de um cliente já cadastrado no sistema (chave estrangeira):
 
 <br>
 <div align="center">
-  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastrar_conta_erro.png?raw=true" alt="Erro cadastro conta" width=48%/>
+  <img src="https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/assets/cadastrar_conta_erro.png?raw=true" alt="Erro cadastro conta" width=52%/>
 </div>
 <div align="center">
 Figura 5 - Erro ao cadastrar a conta antes de cadastrar o cliente.
@@ -123,4 +126,10 @@ Informado um CPF válido, o sistema mostra o nome cliente e solicita a confirma�
 <div align="center">
 Figura 6 - Confirmação de cadastro de conta corrente.
 </div>
+
+<br></br>
+
+#### Realizando operações
+
+Teste  
 
