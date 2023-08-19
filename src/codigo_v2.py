@@ -140,12 +140,12 @@ def cadastrar_conta(contas,clientes):
 
     print('\nConfirma o cadastro da conta corrente?')
     if (confirmar_operacao() == True):
-        contas[nro_conta] = conta
+        contas[str(nro_conta)] = conta
 
         os.system('clear')
         print('Conta corrente criada com sucesso!\n')
         print('Detalhes da Conta corrente:\n')
-        imprimir_detalhes_conta(contas[nro_conta],nro_conta,clientes)
+        imprimir_detalhes_conta(contas[str(nro_conta)],nro_conta,clientes)
     else:
         print('Operação cancelada!\n')
 
@@ -486,12 +486,12 @@ while True:
     elif opcao == '6':
 
         print('Opção selecionada: CADASTRAR CONTA \n')
-        cadastrar_conta(contas,clientes)
+        cadastrar_conta(contas, clientes)
 
     elif opcao == '7':
 
         print('Opção selecionada: LISTAR CONTAS CORRENTE CADASTRADAS \n')
-        listar_contas(contas,clientes)
+        listar_contas(contas, clientes)
 
     elif opcao == '8':
 
