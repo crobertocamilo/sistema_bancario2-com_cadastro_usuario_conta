@@ -56,6 +56,8 @@ def calcular_idade(data_nascimento):
 def confirmar_operacao():
 
 ```  
+<br>  
+
 Utilizando as funções:
 
 ```Python  
@@ -66,13 +68,15 @@ clientes, contas = carregar_dados()
 #Argumentos passados pela posição (positional only)
 depositar(nro_conta, contas, extrato)  
 
-#Argumentos passados com identificação explícita da variável (keyword only) - se a posição dos argumentos for alterada, não é necessário corrigir no código da função
+#Argumentos passados com identificação explícita da variável (keyword only)
+#Se a posição dos argumentos for alterada, não é necessário corrigir no código da função
 sacar(contas = contas, extrato = extrato, nro_conta = nro_conta)
 ```
+<br>  
 
 A partir dos dados dos clientes e contas corrente cadastradas é criado um banco de dados a partir de arquivos em formato **JSON**.
 
-Exemplo de registro clientes (arquivo [clients.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/clientes.json)) com o CPF sendo a chave e um dicionário interno para nome, data de nascimento e endereço:
+Exemplo de registro de clientes (arquivo [clientes.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/clientes.json)) com o CPF sendo a chave e um dicionário interno para nome, data de nascimento e endereço:
 
 ```json
 {
@@ -83,8 +87,9 @@ Exemplo de registro clientes (arquivo [clients.json](https://github.com/croberto
     }
 }
 ```  
+<br>  
 
-Para as contas correntes, a chave é o número da conta (que é auto incrementado pelo programa e sequencial), e o CPF do cliente é vinculado a um cliente já cadastrado, implementando uma integridade de chave estrangeira via aplicação. Exemplo de registro contas correntes (arquivo [contas.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/contas.json)):
+Para as contas correntes, a chave é o número da conta (que é auto incrementado pelo programa e sequencial), e o CPF do cliente é vinculado a um cliente já cadastrado, implementando uma integridade de chave estrangeira via aplicação. Exemplo de registro de contas (arquivo [contas.json](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/contas.json)):
 
 ```json
 {
@@ -114,7 +119,7 @@ Para as contas correntes, a chave é o número da conta (que é auto incrementad
 
 Para executar o [código](https://github.com/crobertocamilo/sistema_bancario2-com_cadastro_usuario_conta/blob/main/src/codigo_v2.py), baixe e extraia este repositório em sua máquina. Tendo o Python já instalado, digite no terminal (ou *prompt* de comando):
 
-`python src/codigo.py` ou `python3 src/codigo.py`
+<center> `python src/codigo.py` ou `python3 src/codigo.py` </center>  
 
 <br>
 O sistema exibirá o menu de opções, conforme mostrado abaixo. Caso o usuário já esteja logado, no cabeçalho serão exibidas as informações sobre a conta corrente.  
